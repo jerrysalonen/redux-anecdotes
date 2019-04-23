@@ -1,33 +1,25 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { addAnecdote } from '../reducers/anecdoteReducer'
 import { setMessage } from '../reducers/notificationReducer'
 import { setFilter } from '../reducers/filterReducer'
 
 const AnecdoteForm = (props) => {
 
-  const store = props.store
-
   const newAnecdote = (event) => {
     event.preventDefault()
     const content = event.target.anecdote.value
-    store.dispatch(
-      addAnecdote(content)
-    )
+    
+    props.addAnecdote(content)
 
     event.target.anecdote.value = ''
 
-    store.dispatch(
-      setFilter(store.getState().anecdotes)
-    )
+    props.setFilter(props.anecdotes)
 
-    store.dispatch(
-      setMessage(`Added: ${content}`)
-    )
+    props.setMessage(`Added: ${content}`)
 
     setTimeout(() => {
-      store.dispatch(
-        setMessage('')
-      )
+      props.setMessage('')
     }, 5000)
 
   }
@@ -43,4 +35,23 @@ const AnecdoteForm = (props) => {
   )
 }
 
-export default AnecdoteForm
+const mapStateToProps = (state) => {
+  return {
+    anecdotes: state.anecdotes,
+    filter: state.filter,
+    notification: state.notification
+  }
+}
+
+const mapDispatchToProps = {
+  setMessage,
+  setFilter,
+  addAnecdote
+}
+
+const ConnectedAnecdoteForm = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AnecdoteForm)
+
+export default ConnectedAnecdoteForm

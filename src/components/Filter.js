@@ -1,27 +1,23 @@
 import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
 import { setFilter } from '../reducers/filterReducer'
 
 const Filter = (props) => {
 
   useEffect(() => {
-    props.store.dispatch(
-      setFilter(props.store.getState().anecdotes)
-    )
+    props.setFilter(props.anecdotes)
   }, [])
 
   const handleChange = (event) => {
     event.preventDefault()
     let filterText = event.target.value
-    let filtered = props.store.getState().anecdotes
+    let filtered = props.anecdotes
     filtered = filtered.filter((anecdote) => {
       let content = anecdote.content.toLowerCase()
       return content.indexOf(
         filterText.toLowerCase()) !== -1
     })
-
-    props.store.dispatch(
-      setFilter(filtered)
-    )
+    props.setFilter(filtered)
   }
 
   return (
@@ -32,4 +28,19 @@ const Filter = (props) => {
   )
 }
 
-export default Filter
+const mapStateToProps = (state) => {
+  return {
+    anecdotes: state.anecdotes
+  }
+}
+
+const mapDispatchToProps = {
+  setFilter
+}
+
+const ConnectedFilter = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Filter)
+
+export default ConnectedFilter
