@@ -11,9 +11,7 @@ const notificationReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case 'MESSAGE':
-      const message = action.content
-      state = message
-      return state
+      return action.content
     default:
       return state 
   }

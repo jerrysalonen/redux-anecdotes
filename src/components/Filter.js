@@ -9,10 +9,9 @@ const Filter = (props) => {
   }, [])
 
   const handleChange = (event) => {
-    event.preventDefault()
     let filterText = event.target.value
     let filtered = props.anecdotes
-    filtered = filtered.filter((anecdote) => {
+    filtered = filtered.filter(anecdote => {
       let content = anecdote.content.toLowerCase()
       return content.indexOf(
         filterText.toLowerCase()) !== -1

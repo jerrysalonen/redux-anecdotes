@@ -7,29 +7,32 @@ import Filter from './Filter'
 
 const AnecdoteList = (props) => {
 
-  const anecdotes = props.visibleAnecdotes
-
   const vote = (id, content) => {
     props.voteAnecdote(id)
-    props.setFilter(props.visibleAnecdotes)
-    props.setMessage(`Voted: ${content}`)
     props.sortByVoted()
-    
+    props.setFilter(props.visibleAnecdotes)
+    notify(content)
+  }
+
+  const notify = (content) => {
+    props.setMessage(`Voted: ${content}`)
     setTimeout(() => {
       props.setMessage('')
     }, 5000)
   }
+
   return (
     <div className='list-group my-md-3'>
     <Filter />
-      {anecdotes.map(anecdote =>
+      {props.visibleAnecdotes.map(anecdote =>
         <div key={anecdote.id} className='row-md-8 list-group-item'>
           <div className='my-md-2'>
             {anecdote.content}
           </div>
           <div className='row mx-md-0'>
             <p>has {anecdote.votes} votes</p>
-            <button className='mx-md-2 btn btn-primary' onClick={() => vote(anecdote.id, anecdote.content)}>vote</button>
+            <button className='mx-md-2 btn btn-primary' 
+              onClick={() => vote(anecdote.id, anecdote.content)}>vote</button>
           </div>
         </div>
       )}
@@ -38,7 +41,7 @@ const AnecdoteList = (props) => {
 }
 
 const anecdotesToShow = ({ anecdotes, filter }) => {
-  return anecdotes === filter ? anecdotes : filter
+    return anecdotes === filter ? anecdotes : filter
 }
 
 const mapStateToProps = (state) => {

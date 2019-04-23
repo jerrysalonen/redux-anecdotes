@@ -9,19 +9,18 @@ const AnecdoteForm = (props) => {
   const newAnecdote = (event) => {
     event.preventDefault()
     const content = event.target.anecdote.value
-    
+
     props.addAnecdote(content)
-
+    
     event.target.anecdote.value = ''
-
+    
     props.setFilter(props.anecdotes)
-
+    
     props.setMessage(`Added: ${content}`)
-
+    
     setTimeout(() => {
       props.setMessage('')
     }, 5000)
-
   }
 
   return (
@@ -38,7 +37,6 @@ const AnecdoteForm = (props) => {
 const mapStateToProps = (state) => {
   return {
     anecdotes: state.anecdotes,
-    filter: state.filter,
     notification: state.notification
   }
 }
