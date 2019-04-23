@@ -1,6 +1,7 @@
 import React from 'react'
 import { voteAnecdote, sortByVoted } from '../reducers/anecdoteReducer'
 import { setMessage } from '../reducers/notificationReducer'
+import { setFilter } from '../reducers/filterReducer'
 
 const AnecdoteList = (props) => {
 
@@ -10,6 +11,10 @@ const AnecdoteList = (props) => {
   const vote = (id, content) => {
     store.dispatch(
       voteAnecdote(id)
+    )
+
+    store.dispatch(
+      setFilter(store.getState().anecdotes)
     )
 
     store.dispatch(

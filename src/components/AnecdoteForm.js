@@ -1,6 +1,7 @@
 import React from 'react'
 import { addAnecdote } from '../reducers/anecdoteReducer'
 import { setMessage } from '../reducers/notificationReducer'
+import { setFilter } from '../reducers/filterReducer'
 
 const AnecdoteForm = (props) => {
 
@@ -12,7 +13,12 @@ const AnecdoteForm = (props) => {
     store.dispatch(
       addAnecdote(content)
     )
+
     event.target.anecdote.value = ''
+
+    store.dispatch(
+      setFilter(store.getState().anecdotes)
+    )
 
     store.dispatch(
       setMessage(`Added: ${content}`)
