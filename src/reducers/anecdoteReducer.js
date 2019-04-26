@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -31,8 +33,8 @@ export const addAnecdote = (content) => {
     type: 'NEW_ANECDOTE',
     data: {
       content,
-      votes: 0,
-      id: getId()
+      id: getId(),
+      votes: 0
     }
   }
 }
@@ -54,7 +56,8 @@ const anecdoteReducer = (state = initialState, action) => {
         anecdote.id !== id ? anecdote : votedAnecdote
       )
     case 'NEW_ANECDOTE':
-        return [...state, action.data]
+        let stateCpy = _.cloneDeep(state) 
+        return [...stateCpy, action.data]
     case 'SORT':
         return state.slice().sort((a, b) => a.votes < b.votes ? 1 : -1 )
     default:

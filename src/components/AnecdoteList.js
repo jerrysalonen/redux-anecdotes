@@ -15,7 +15,7 @@ const AnecdoteList = (props) => {
   }
 
   const notify = (content) => {
-    props.setMessage(`Voted: ${content}`)
+    props.setMessage(`Voted: "${content}"`)
     setTimeout(() => {
       props.setMessage('')
     }, 5000)
@@ -23,7 +23,7 @@ const AnecdoteList = (props) => {
 
   return (
     <div className='list-group my-md-3'>
-    <Filter />
+      <Filter />
       {props.visibleAnecdotes.map(anecdote =>
         <div key={anecdote.id} className='row-md-8 list-group-item'>
           <div className='my-md-2'>
@@ -31,7 +31,7 @@ const AnecdoteList = (props) => {
           </div>
           <div className='row mx-md-0'>
             <p>has {anecdote.votes} votes</p>
-            <button className='mx-md-2 btn btn-primary' 
+            <button className='mx-md-2 btn btn-primary'
               onClick={() => vote(anecdote.id, anecdote.content)}>vote</button>
           </div>
         </div>
@@ -40,8 +40,24 @@ const AnecdoteList = (props) => {
   )
 }
 
+const compareObjects = (objA, objB) => {
+  let objAProps = Object.getOwnPropertyNames(objA)
+  let objBProps = Object.getOwnPropertyNames(objB)
+
+  if (objAProps.length !== objBProps.length) {
+    return false
+  }
+
+  objAProps.forEach(prop => {
+    if (objA[prop] !== objB[prop]) {
+      return false
+    }
+  })
+  return true
+}
+
 const anecdotesToShow = ({ anecdotes, filter }) => {
-    return anecdotes === filter ? anecdotes : filter
+  return compareObjects(anecdotes, filter) ? anecdotes : filter
 }
 
 const mapStateToProps = (state) => {
