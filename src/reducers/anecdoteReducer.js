@@ -1,41 +1,23 @@
 import _ from 'lodash'
-
-const anecdotesAtStart = [
-  'If it hurts, do it more often',
-  'Adding manpower to a late software project makes it later!',
-  'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
-  'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
-  'Premature optimization is the root of all evil.',
-  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
-]
-
-const getId = () => (100000 * Math.random()).toFixed(0)
-
-const asObject = (anecdote) => {
-  return {
-    content: anecdote,
-    id: getId(),
-    votes: 0
-  }
-}
-
-const initialState = anecdotesAtStart.map(asObject)
+import anecdoteService from '../services/anecdotes'
 
 export const voteAnecdote = (id) => {
-  return {
-    type: 'VOTE',
-    data: id
+  return async dispatch => {
+    anecdoteService.vote(id)
+    dispatch({
+      type: 'VOTE',
+      data: id
+    })
   }
 }
 
-export const addAnecdote = (content) => {
-  return {
-    type: 'NEW_ANECDOTE',
-    data: {
-      content,
-      id: getId(),
-      votes: 0
-    }
+export const addAnecdote = (data) => {
+  return async dispatch => {
+    const newAnecdote = await anecdoteService.createNew(data)
+    dispatch({
+      type: 'NEW_ANECDOTE',
+      data: newAnecdote
+    })
   }
 }
 
@@ -45,21 +27,33 @@ export const sortByVoted = () => {
   }
 }
 
-const anecdoteReducer = (state = initialState, action) => {
+export const initAnecdotes = () => {
+  return async dispatch => {
+    const data = await anecdoteService.getAll()
+    dispatch({
+      type: 'INIT',
+      data
+    })
+  }
+}
 
+const anecdoteReducer = (state = [], action) => {
   switch (action.type) {
     case 'VOTE':
       const id = action.data
       const anecdoteToVote = state.find(a => a.id === id)
-      const votedAnecdote = {...anecdoteToVote, votes: anecdoteToVote.votes + 1}
-      return state.map(anecdote => 
+      const votedAnecdote = { ...anecdoteToVote, votes: anecdoteToVote.votes + 1 }
+      return state.map(anecdote =>
         anecdote.id !== id ? anecdote : votedAnecdote
       )
     case 'NEW_ANECDOTE':
-        let stateCpy = _.cloneDeep(state) 
-        return [...stateCpy, action.data]
+      let stateCpy = _.cloneDeep(state)
+      return [...stateCpy, action.data]
     case 'SORT':
-        return state.slice().sort((a, b) => a.votes < b.votes ? 1 : -1 )
+      return state.slice().sort((a, b) => a.votes < b.votes ? 1 : -1)
+    case 'INIT':
+      const init = _.cloneDeep(action.data)
+      return init
     default:
       return state
   }

@@ -15,10 +15,7 @@ const AnecdoteList = (props) => {
   }
 
   const notify = (content) => {
-    props.setMessage(`Voted: "${content}"`)
-    setTimeout(() => {
-      props.setMessage('')
-    }, 5000)
+    props.setMessage(`Voted: "${content}"`, 5)
   }
 
   return (
@@ -40,24 +37,8 @@ const AnecdoteList = (props) => {
   )
 }
 
-const compareObjects = (objA, objB) => {
-  let objAProps = Object.getOwnPropertyNames(objA)
-  let objBProps = Object.getOwnPropertyNames(objB)
-
-  if (objAProps.length !== objBProps.length) {
-    return false
-  }
-
-  objAProps.forEach(prop => {
-    if (objA[prop] !== objB[prop]) {
-      return false
-    }
-  })
-  return true
-}
-
 const anecdotesToShow = ({ anecdotes, filter }) => {
-  return compareObjects(anecdotes, filter) ? anecdotes : filter
+  return anecdotes.length === filter.length ? anecdotes : filter
 }
 
 const mapStateToProps = (state) => {

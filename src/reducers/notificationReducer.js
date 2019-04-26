@@ -1,9 +1,18 @@
 const initialState = ''
 
-export const setMessage = (content) => {
-  return {
-    type: 'MESSAGE',
-    content 
+export const setMessage = (content, time) => {
+  return async dispatch => {
+    dispatch({
+      type: 'MESSAGE',
+      content
+    })
+    time = time * 1000
+    setTimeout(() => {
+      dispatch({
+        type: 'MESSAGE',
+        content: ''
+      })
+    }, time)
   }
 }
 

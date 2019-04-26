@@ -1,4 +1,4 @@
-const initialState = []
+import _ from 'lodash'
 
 export const setFilter = (content) => {
   return {
@@ -7,11 +7,12 @@ export const setFilter = (content) => {
   }
 }
 
-const filterReducer = (state = initialState, action) => {
+const filterReducer = (state = [], action) => {
 
   switch (action.type) {
     case 'FILTER':
-      return [...action.content]
+      let filtered = _.cloneDeep(action.content)
+      return filtered
     default:
       return state 
   }

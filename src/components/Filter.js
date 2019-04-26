@@ -1,12 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { setFilter } from '../reducers/filterReducer'
 
 const Filter = (props) => {
-
-  useEffect(() => {
-    props.setFilter(props.anecdotes)
-  }, [])
 
   const handleChange = (event) => {
     let filterText = event.target.value
@@ -29,7 +25,8 @@ const Filter = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    anecdotes: state.anecdotes
+    anecdotes: state.anecdotes,
+    filter: state.filter
   }
 }
 
